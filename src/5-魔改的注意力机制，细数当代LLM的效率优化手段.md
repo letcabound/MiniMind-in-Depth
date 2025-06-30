@@ -83,6 +83,8 @@ Flash Attention是一种**显存优化 + 更快计算**的注意力实现，数�
 
 它通过采用流式分块计算，在softmax前后都不存中间结果，避免显存瓶颈。提供更高吞吐、更长上下文能力而不会爆显存。
 
+**过程**：将长文本序列的所有token的 q 分块【token维度，每次都取固定数量的token作为一个块】，然后将每个block块的q对整个序列所有的 k/v 进行注意力计算。每个block在局部计算中使用数值稳定的softmax，并逐步累加结果。
+
 在PyTorch中，可以简单的通过`torch.nn.functional.scaled_dot_product_attention`直接使用Flash Attention。
 
 以上介绍的KV cache，GQA，Flash Attention均已在MiniMind的Attention模块进行了实现，如下：
